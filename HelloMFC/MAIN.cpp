@@ -26,7 +26,10 @@
 #include "resource.h"    //main symbols
 //-----------------------------------------------------------------------------------------
 //Globals
-CEdit * TEST;
+CEdit * g_pInput;
+CEdit * g_pOutput;
+CButton * g_pStart;
+
 class GAME_FORM : public CDialog
 {
 public:
@@ -40,12 +43,22 @@ protected:
 	virtual BOOL OnInitDialog() 
 	{ 
 		CDialog::OnInitDialog();
-		//TEST = (CEdit *) GetDlgItem(IDC_TEST);
-		//TEST->SetWindowText(L"Hello!");
+		g_pInput = (CEdit*)GetDlgItem(CE_INPUT);
+		g_pOutput = (CEdit*)GetDlgItem(CE_OUTPUT);
+		g_pStart = (CButton*)GetDlgItem(CB_START);
+
+		g_pInput->SetWindowTextW(L"Type HERE!");
+		g_pOutput->SetWindowTextW(L"Click \"START\" to begin!");
 		return true; 
 	}
 public:
 	DECLARE_MESSAGE_MAP()
+//-----------------------------------------------------------------------------------------
+	afx_msg void OnStart()
+	{
+		MessageBox(L"BYE");
+		g_pStart->EnableWindow(false);
+	}
 };
 //-----------------------------------------------------------------------------------------
 class TheGame : public CWinApp
@@ -66,6 +79,7 @@ public:
 //-----------------------------------------------------------------------------------------
 //Need a Message Map Macro for both CDialog and CWinApp
 BEGIN_MESSAGE_MAP(GAME_FORM, CDialog)
+	ON_COMMAND(CB_START, OnStart)
 END_MESSAGE_MAP()
 //-----------------------------------------------------------------------------------------
 TheGame theApp;  //Starts the Application
